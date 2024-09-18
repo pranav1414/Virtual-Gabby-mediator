@@ -1,107 +1,52 @@
 import streamlit as st
 
-# Set page configuration
-st.set_page_config(page_title="Virtual Gabby Mediator", layout="wide")
-
-# Initialize session state
-if "step" not in st.session_state:
-    st.session_state.step = 1
-
 # User Interface Layer
-def user_interface_layer():
+def user_interface():
     st.sidebar.title("Virtual Gabby Mediator")
-    username = st.sidebar.text_input("Username")
-    password = st.sidebar.text_input("Password", type='password')
-    login_button = st.sidebar.button("Login")
-
-    if login_button:
-        st.sidebar.success(f"Welcome, {username}!")
-        st.session_state.step = 2  # Proceed to Communication Layer
+    st.sidebar.text_input("Username")
+    st.sidebar.text_input("Password", type="password")
+    st.sidebar.button("Login")
 
 # Communication Layer
 def communication_layer():
-    st.title("How can I help you?")
-    user_input = st.text_area("Please enter what you want to discuss below:", "")
-    if user_input:
-        st.session_state.step = 3  # Proceed to Mediation Layer
+    st.markdown("<h2 style='color: lightgreen;'>How can I help you?</h2>", unsafe_allow_html=True)
+    st.text_area("Enter your request here:")
 
 # Mediation Layer
 def mediation_layer():
-    st.title("Let me be your mediator")
-    mediation_choice = st.radio("Please select an option:",
-                                ["I need more knowledge about men after marriage",
-                                 "I need more knowledge about women after marriage",
-                                 "I need legal advice",
-                                 "I need honeymoon packages"])
-    st.write(f"You selected: {mediation_choice}")
-    st.session_state.step = 4  # Proceed to Educational Layer
+    st.markdown("<h2 style='color: #FFD700;'>Let me be your mediator</h2>", unsafe_allow_html=True)
+    options = [
+        "I need more knowledge about men after marriage",
+        "I need more knowledge about women after marriage",
+        "I need legal advice",
+        "I need honeymoon packages"
+    ]
+    for option in options:
+        st.button(option)
 
-# Educational Layer with YouTube Links
-def educational_layer_links():
-    st.title("Educational Resources")
-    st.write("Click on the links below to view educational content:")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if st.button("Video 1"):
-            st.video("https://www.youtube.com/watch?v=-65jxGAxMco")
-        if st.button("Video 3"):
-            st.video("https://www.youtube.com/watch?v=eCLk-2iArYc")
-    
-    with col2:
-        if st.button("Video 2"):
-            st.video("https://www.youtube.com/watch?v=dDGs0uT-F1c")
-        if st.button("Video 4"):
-            st.video("https://www.youtube.com/watch?v=AWkpjGMZFjc")
-    
-    st.session_state.step = 5  # Proceed to Educational Layer Buttons
+# Educational Layer
+def educational_layer():
+    st.markdown("<h2 style='color: orange;'>Educational Resources</h2>", unsafe_allow_html=True)
+    links = {
+        "Video 1": "https://www.youtube.com/watch?v=-65jxGAxMco",
+        "Video 2": "https://www.youtube.com/watch?v=dDGs0uT-F1c",
+        "Video 3": "https://www.youtube.com/watch?v=eCLk-2iArYc",
+        "Video 4": "https://www.youtube.com/watch?v=AWkpjGMZFjc"
+    }
+    for name, url in links.items():
+        st.markdown(f"[{name}]({url})", unsafe_allow_html=True)
 
-# Educational Layer with Buttons
-def educational_layer_buttons():
-    st.title("Additional Educational Resources")
-    
-    col1, col2 = st.columns(2)
-    
-    with col1:
-        if st.button("Coursera Courses"):
-            st.write("Redirecting to Coursera...")
-    
-    with col2:
-        if st.button("Better Parenting Plan Courses"):
-            st.write("Redirecting to Parenting Plan Courses...")
+# Additional Educational Layer
+def additional_educational_layer():
+    st.markdown("<h2 style='color: yellow;'>Additional Courses</h2>", unsafe_allow_html=True)
+    st.button("Coursera Courses")
+    st.button("Better parenting plan courses")
 
-# Main Application
-def main():
-    # Applying the color schemes to different layers
-    st.markdown("""
-    <style>
-    .sidebar .sidebar-content {background-color: #0e4d92;}
-    h1 {color: #0e4d92;}
-    .stTextInput>div>div {color: #0e4d92;}
-    textarea {background-color: #c3e6cb; color: black;}
-    .css-1v0mbdj {background-color: #c3e6cb;}
-    .stRadio>div {background-color: #ffa500; color: black;}
-    .stButton>button {background-color: #ffa500; color: black;}
-    </style>
-    """, unsafe_allow_html=True)
-    
-    # Displaying layers based on session state
-    if st.session_state.step == 1:
-        user_interface_layer()  # Show the User Interface Layer
-    
-    if st.session_state.step == 2:
-        communication_layer()  # Show the Communication Layer
-        
-    if st.session_state.step == 3:
-        mediation_layer()  # Show the Mediation Layer
-    
-    if st.session_state.step == 4:
-        educational_layer_links()  # Show the Educational Layer with YouTube Links
-    
-    if st.session_state.step == 5:
-        educational_layer_buttons()  # Show the Educational Layer with buttons
+# Navigation
+page_names = ["User Interface", "Communication", "Mediation", "Educational", "Additional Educational"]
+page_funcs = [user_interface, communication_layer, mediation_layer, educational_layer, additional_educational_layer]
 
-# Run the application
-if __name__ == '__main__':
-    main()
+st.sidebar.title("Navigation")
+selection = st.sidebar.radio("Go to", page_names)
+
+page_funcs[page_names.index(selection)]()
