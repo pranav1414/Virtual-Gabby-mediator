@@ -3,6 +3,10 @@ import streamlit as st
 # Set page configuration
 st.set_page_config(page_title="Virtual Gabby Mediator", layout="wide")
 
+# Initialize session state
+if "step" not in st.session_state:
+    st.session_state.step = 1
+
 # User Interface Layer
 def user_interface_layer():
     st.sidebar.title("Virtual Gabby Mediator")
@@ -12,12 +16,14 @@ def user_interface_layer():
 
     if login_button:
         st.sidebar.success(f"Welcome, {username}!")
+        st.session_state.step = 2  # Proceed to Communication Layer
 
 # Communication Layer
 def communication_layer():
     st.title("How can I help you?")
     user_input = st.text_area("Please enter what you want to discuss below:", "")
-    st.success("Message received!") if user_input else st.info("Awaiting your message...")
+    if user_input:
+        st.session_state.step = 3  # Proceed to Mediation Layer
 
 # Mediation Layer
 def mediation_layer():
@@ -28,6 +34,7 @@ def mediation_layer():
                                  "I need legal advice",
                                  "I need honeymoon packages"])
     st.write(f"You selected: {mediation_choice}")
+    st.session_state.step = 4  # Proceed to Educational Layer
 
 # Educational Layer with YouTube Links
 def educational_layer_links():
@@ -47,6 +54,8 @@ def educational_layer_links():
             st.video("https://www.youtube.com/watch?v=dDGs0uT-F1c")
         if st.button("Video 4"):
             st.video("https://www.youtube.com/watch?v=AWkpjGMZFjc")
+    
+    st.session_state.step = 5  # Proceed to Educational Layer Buttons
 
 # Educational Layer with Buttons
 def educational_layer_buttons():
@@ -77,19 +86,21 @@ def main():
     </style>
     """, unsafe_allow_html=True)
     
-    user_interface_layer()  # Show the User Interface Layer
+    # Displaying layers based on session state
+    if st.session_state.step == 1:
+        user_interface_layer()  # Show the User Interface Layer
     
-    if st.sidebar.button("Proceed to Communication Layer"):
+    if st.session_state.step == 2:
         communication_layer()  # Show the Communication Layer
         
-        if st.button("Proceed to Mediation Layer"):
-            mediation_layer()  # Show the Mediation Layer
-            
-            if st.button("Proceed to Educational Layer Links"):
-                educational_layer_links()  # Show the Educational Layer with YouTube Links
-                
-                if st.button("Proceed to Educational Layer Buttons"):
-                    educational_layer_buttons()  # Show the Educational Layer with buttons
+    if st.session_state.step == 3:
+        mediation_layer()  # Show the Mediation Layer
+    
+    if st.session_state.step == 4:
+        educational_layer_links()  # Show the Educational Layer with YouTube Links
+    
+    if st.session_state.step == 5:
+        educational_layer_buttons()  # Show the Educational Layer with buttons
 
 # Run the application
 if __name__ == '__main__':
