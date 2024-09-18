@@ -20,8 +20,11 @@ This project is not a legal service, but rather a tool to facilitate meaningful 
 
 # How Virtual Gabby Works
 Step 1: Virtual Gabby begins by individually assessing each parent's conflict level and understanding their needs.
+
 Step 2: Through continuous dialogue, Virtual Gabby mediates between parents, encouraging open communication and guiding them toward agreements that benefit their child.
+
 Step 3: Virtual Gabby educates parents on co-parenting best practices and relevant legal concepts.
+
 Step 4: Once the discussions conclude, Virtual Gabby drafts a parenting plan, which parents can take to a lawyer or appropriate court body for review and finalization.
 
 # Future Capabilities (Planned for Future Releases)
